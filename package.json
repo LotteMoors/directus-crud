@@ -1,22 +1,22 @@
 {
-  "name": "directus-crud",
-  "version": "1.0.0",
-  "description": "directus test",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jozzeh/directus-crud.git"
-  },
-  "author": "JDB",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Jozzeh/directus-crud/issues"
-  },
-  "homepage": "https://github.com/Jozzeh/directus-crud#readme",
-  "dependencies": {
-    "sqlite3": "^5.1.6"
+    "name": "directus-crud",
+    "version": "1.0.0",
+    "description": "directus test",
+    "main": "index.js",
+    "scripts": {
+      "install": "cd backend && npm install",
+      "start": "cd backend && npx directus start",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Jozzeh/directus-crud.git"
+    },
+    "author": "JDB",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Jozzeh/directus-crud/issues"
+    },
+    "homepage": "https://github.com/Jozzeh/directus-crud#readme"
   }
-}
+  
