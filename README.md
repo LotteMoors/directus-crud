@@ -31,4 +31,4 @@ So the application itself is a small webshop that has some products, customers a
 3. In the details, get all relational data through the API.  
 4. Store the countries in global state for the session of a user. Re-use the countries data for a user session.   
 5. Create a login screen and login to directus..   Directus uses JWT access & refresh tokens 
-to authenticate. 
+to authenticate.  (more info: https://docs.directus.io/reference/authentication.html)     
