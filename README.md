@@ -17,7 +17,10 @@ It is a directus instance.
 Directus enables us to easely create a backend.  
 The backend is already set up completely and should not be changed. 
 
-API spec / Open API / Swagger:   http://localhost:8055/server/specs/oas    
+API spec / Open API / Swagger:   
+see ./backend/openapi.json     
+or    
+http://localhost:8055/server/specs/oas    
 
 ## frontend   
 Add the frontend of your liking in the frontend folder, and start coding.   
