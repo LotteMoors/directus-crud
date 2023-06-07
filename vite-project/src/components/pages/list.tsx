@@ -1,52 +1,52 @@
-import {useState, useEffect} from "react";
 import {BallTriangle} from "react-loader-spinner";
+import {Link} from "react-router-dom";
+import {useQuery} from "react-query";
 import {customerData} from "../../types/types";
+import Card from "../basics/Card/Card";
+import Button from "../basics/Button/Button";
 
 function List() {
-  const [json, setJson] = useState<{data: [customerData]}>();
-  const [error, setError] = useState<string>();
+  const getJson = async () => {
+    const json = await fetch("http://localhost:8055/items/customers")
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        return data;
+      });
 
-  useEffect(() => {
-    if (!json) {
-      fetch("http://localhost:8055/items/customers")
-        .then(response => {
-          return response.json();
-        })
-        .then(data => {
-          setJson(data);
-        })
-        .catch((e: Error) => {
-          setError(e.message);
-          console.log(e.message);
-        });
-    }
-  }, [json]);
+    return json.data;
+  };
+  const {data, error, isLoading} = useQuery("customer", getJson);
+
+  if (error) return <div style={{color: "red"}}>Request failed</div>;
+  if (isLoading)
+    return (
+      <BallTriangle
+        height={100}
+        width={100}
+        radius={5}
+        color="#4fa94d"
+        ariaLabel="ball-triangle-loading"
+        visible={true}
+      />
+    );
 
   return (
     <div>
       <div style={{margin: "2rem"}}>LIST</div>
-      {json && !error ? (
-        json?.data?.map((el: customerData, i: number) => {
-          return (
-            <div key={i} style={{margin: "2rem"}}>
-              <p>{el.firstname}</p>
-              <p>{el.lastname}</p>
-              <p>{el.city}</p>
-            </div>
-          );
-        })
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <BallTriangle
-          height={100}
-          width={100}
-          radius={5}
-          color="#4fa94d"
-          ariaLabel="ball-triangle-loading"
-          visible={true}
-        />
-      )}
+      <Link to="/create">
+        <Button label="+ Create" />
+      </Link>
+      {data?.map((el: customerData, i: number) => {
+        return (
+          <Card
+            key={i}
+            title={`${el.firstname} ${el.lastname}`}
+            content={`${el.street} ${el.house_number}, ${el.zip_code}`}
+          />
+        );
+      })}
     </div>
   );
 }
