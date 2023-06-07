@@ -1,0 +1,21 @@
+{
+  "name": "vite-project",
+  "library": "react",
+  "installer": "yarn",
+  "hasTs": true,
+  "layout": "SASS-modules",
+  "packages": [
+    "Error-boundary",
+    "Mock-service-worker",
+    "React-router",
+    "Zustand"
+  ],
+  "components": {
+    "basics": "folder",
+    "elements": "folder",
+    "pages": "folder"
+  },
+  "structure": "BEP (recommended)",
+  "usePropTypes": false,
+  "mswPath": "src/mocks/endpoints"
+}
