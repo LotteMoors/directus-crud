@@ -34,7 +34,6 @@ function List() {
 
   return (
     <div>
-      <div style={{margin: "2rem"}}>LIST</div>
       <Link to="/create">
         <Button label="+ Create" />
       </Link>
