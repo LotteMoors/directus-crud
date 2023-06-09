@@ -40,10 +40,30 @@ const router = createBrowserRouter([
 
 const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  </React.StrictMode>
-);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+
+if (import.meta.env.VITE_MOCK_API === "1") {
+  import("./mocks/browser")
+    .then(({worker}) => {
+      worker.start({
+        onUnhandledRequest: "bypass",
+      });
+    })
+    .then(() => {
+      root.render(
+        <React.StrictMode>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+          </QueryClientProvider>
+        </React.StrictMode>
+      );
+    });
+} else {
+  root.render(
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </React.StrictMode>
+  );
+}
