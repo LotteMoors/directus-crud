@@ -3,6 +3,9 @@ import {object, string, number} from "yup";
 import {customerData} from "../../types/types";
 import {api} from "../../utils/funcs/api";
 import {useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import Input from "../basics/Input/Input";
 
 const initialValues = {
   firstname: "",
@@ -15,31 +18,30 @@ const initialValues = {
   telephone: "1234",
 };
 
-function Create() {
-  const [data, setData] = useState<customerData>(initialValues);
-  const [error, setError] = useState<[]>([]);
-  const consumerSchema = object({
-    firstname: string().required(),
-    lastname: string().required(),
-    house_number: string().required(),
-    zip_code: number().min(1000).max(9999),
-    city: string().required(),
-    country: number().required().positive().integer(),
-  });
-  const navigate = useNavigate();
+const consumerSchema = object({
+  firstname: string().required(),
+  lastname: string().required(),
+  house_number: string().required(),
+  zip_code: number().min(1000).max(9999),
+  city: string().required(),
+  country: number().required().positive().integer(),
+  street: string().required()
+});
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError([]);
-    consumerSchema.validate(data, {abortEarly: false}).catch(function (err) {
-      setError(err.errors);
-    });
-    setTimeout(async () => {
-      if (!error.length && data) {
-        await api("http://localhost:8055/items/customers", "POST", data).then(data => data && navigate("/list"));
-      }
-    }, 3000);
-  };
+function Create() {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: {errors},
+    reset,
+  } = useForm<customerData>({
+    resolver: yupResolver(consumerSchema),
+    defaultValues: initialValues,
+  });
+  const [data, setData] = useState<customerData>(initialValues);
+  const navigate = useNavigate();
+  let value: "city" | "country" | "firstname" | "house_number" | "lastname" | "street" | "zip_code" | "telephone"
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value, type} = e.target;
@@ -49,38 +51,19 @@ function Create() {
     });
   };
 
-  const hasError = (name: string) => {
-    if (error.length) {
-      const err = error.find((err: string) => {
-        return err.includes(name);
-      });
-      return <p style={{color: "red"}}> {err} </p>;
+  const onSubmit = async (data: customerData) => {
+    if (Object.keys(errors).length === 0 && data) {
+      await api("http://localhost:8055/items/customers", "POST", data).then(
+        data => data && (navigate("/list"), reset())
+      );
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{display: "flex", flexDirection: "column", width: "20rem"}}>
-      <label htmlFor="firstname">First name:</label>
-      <input type="text" id="firstname" name="firstname" onChange={handleInputChange} />
-      {hasError("firstname")}
-      <label htmlFor="lastname">Last name:</label>
-      <input type="text" id="lastname" name="lastname" onChange={handleInputChange} />
-      {hasError("lastname")}
-      <label htmlFor="street">Street:</label>
-      <input type="text" id="street" name="street" onChange={handleInputChange} />
-      {hasError("street")}
-      <label htmlFor="house_number">House number:</label>
-      <input type="text" id="house_number" name="house_number" onChange={handleInputChange} />
-      {hasError("house_number")}
-      <label htmlFor="zip_code">Zip code:</label>
-      <input type="number" id="zip_code" name="zip_code" onChange={handleInputChange} />
-      {hasError("zip_code")}
-      <label htmlFor="city">City:</label>
-      <input type="text" id="city" name="city" onChange={handleInputChange} />
-      {hasError("city")}
-      <label htmlFor="country">Country:</label>
-      <input type="number" id="country" name="country" onChange={handleInputChange} />
-      {hasError("country")}
+    <form onSubmit={handleSubmit(onSubmit)} style={{display: "grid", gridTemplateColumns: '50% 50%', width: "100%"}}>
+      {Object.keys(getValues()).map(el => {
+       return <Input title={el} name={el as typeof value} error={errors[el as typeof value]} register={register} handleInputChange={handleInputChange}/>
+      })}
       <input type="submit" value="Submit" />
     </form>
   );

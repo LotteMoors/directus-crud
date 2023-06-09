@@ -6,19 +6,35 @@ import App from "./App.tsx";
 import "./index.css";
 import List from "./components/pages/list.tsx";
 import Create from "./components/pages/create.tsx";
+import ErrorElement from "./components/elements/ErrorElement/ErrorElement.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
-  },
-  {
-    path: "/list",
-    element: <List />,
-  },
-  {
-    path: "/create",
-    element: <Create />,
+    errorElement: <ErrorElement />,
+    children: [
+      {
+        index: true,
+        element: <App />,
+      },
+      {
+        path: "/list",
+        children: [
+          {
+            index: true,
+            element: <List />,
+          },
+          {
+            path: "/list/:id",
+            element: <List />,
+          },
+        ],
+      },
+      {
+        path: "/create",
+        element: <Create />,
+      },
+    ],
   },
 ]);
 

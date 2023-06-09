@@ -7,6 +7,7 @@ import Button from "../basics/Button/Button";
 import {api} from "../../utils/funcs/api";
 
 function List() {
+  // const params = useParams()
   const getCustomers = async () => {
     const json = await api("http://localhost:8055/items/customers", "GET", undefined);
     return json.data;
@@ -38,12 +39,12 @@ function List() {
         <Button label="+ Create" />
       </Link>
       {data?.map((el: customerData, i: number) => {
-        const country = countries?.find((country: {id: number; name: string}) => country.id === el.country);
+        const country = countries.find((country: {id: number; name: string}) => country.id === el.country);
         return (
           <Card
             key={i}
             title={`${el.firstname} ${el.lastname}`}
-            content={`${el.street} ${el.house_number} - ${el.zip_code}, ${country?.name}`}
+            content={`${el.street} ${el.house_number} - ${el.zip_code}, ${country.name}`}
           />
         );
       })}
