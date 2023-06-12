@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* istanbul ignore file */
 import {rest} from "msw";
 import {mockDatabase} from "../../mockDatabase";

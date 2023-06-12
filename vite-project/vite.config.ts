@@ -5,6 +5,12 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   test: {
-    environment: 'jsdom',
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["./tests.setup.ts"],
+    coverage: {
+      provider: "istanbul", // or 'c8'
+      reporter: ["cobertura", "html"],
+    },
   },
 })
