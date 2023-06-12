@@ -5,8 +5,9 @@ import {mockDatabase} from "../../mockDatabase";
 import {customerData} from "../../../types/types";
 
 //@ts-ignore
-export function getBiggestIndex(validateArray: any, key: string) {
+export function getBiggestIndex(validateArray: array, key: string) {
   let biggestInt = 0;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validateArray.forEach((el: any) => {
     if (parseInt(el[key]) >= biggestInt) {
       biggestInt = parseInt(el[key]) + 1;
@@ -16,6 +17,11 @@ export function getBiggestIndex(validateArray: any, key: string) {
 }
 
 export const customers = [
+  // Handles a GET request
+  rest.get(import.meta.env.VITE_MOCK_API_URL + "/items/customers", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockDatabase.customers));
+  }),
+  
   // Handles a POST request
   rest.post(import.meta.env.VITE_MOCK_API_URL + "/items/customers", (req, res, ctx) => {
     const body = req.body as customerData;
@@ -31,11 +37,6 @@ export const customers = [
       zip_code: body.zip_code,
     });
     return res(ctx.status(200), ctx.json(mockDatabase.customers));
-  }),
-
-  // Handles a GET request
-  rest.get(import.meta.env.VITE_MOCK_API_URL + "/items/customers", (req, res, ctx) => {
-    return res(ctx.json(mockDatabase.customers));
   }),
 
   // Handles a DELETE request
