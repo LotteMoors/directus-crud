@@ -6,5 +6,5 @@ export async function api(url: string, method: "PUT" | "POST" | "GET" | "DELETE"
     },
     body: JSON.stringify(data),
   });
-  return response.json();
+  return response.status === 200 ? response.json() : undefined ;
 }
