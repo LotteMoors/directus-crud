@@ -2,19 +2,8 @@
 /* istanbul ignore file */
 import {rest} from "msw";
 import {mockDatabase} from "../../mockDatabase";
+import {customerData} from "../../../types/types";
 
-/*
-DELETE: 
-url = import.meta.env.VITE_MOCK_API_URL + "/items/customers/:id"
-mockDatabase.customers.forEach(el => {if(el.id === id){
-    DELETE DEZE INDEX OF ELEMENT IN ARRAY MOCKDATABASE.CUSTOMERS
-}})
-
-
-------
-
-
-*/
 //@ts-ignore
 export function getBiggestIndex(validateArray: any, key: string) {
   let biggestInt = 0;
@@ -29,16 +18,36 @@ export function getBiggestIndex(validateArray: any, key: string) {
 export const customers = [
   // Handles a POST request
   rest.post(import.meta.env.VITE_MOCK_API_URL + "/items/customers", (req, res, ctx) => {
-    mockDatabase.customers.push({id: getBiggestIndex(mockDatabase.customers, "id"), data: "MSW is cool"});
-    return res(
-      // Respond with a 200 status code
-      ctx.status(200),
-      ctx.json(mockDatabase.customers)
-    );
+    const body = req.body as customerData;
+    mockDatabase.customers.push({
+      id: getBiggestIndex(mockDatabase.customers, "id"),
+      city: body.city,
+      country: body.country,
+      firstname: body.firstname,
+      house_number: body.house_number,
+      lastname: body.lastname,
+      street: body.street,
+      telephone: body.telephone,
+      zip_code: body.zip_code,
+    });
+    return res(ctx.status(200), ctx.json(mockDatabase.customers));
   }),
 
   // Handles a GET request
   rest.get(import.meta.env.VITE_MOCK_API_URL + "/items/customers", (req, res, ctx) => {
+    return res(ctx.json(mockDatabase.customers));
+  }),
+
+  // Handles a DELETE request
+  rest.delete(import.meta.env.VITE_MOCK_API_URL + "/items/customers/:id", (req, res, ctx) => {
+    mockDatabase.customers.forEach(el => {
+      if (el.id === Number(req.params.id)) {
+        const index = mockDatabase.customers.indexOf(el);
+        if (index > -1) {
+          mockDatabase.customers.splice(index, 1);
+        }
+      }
+    });
     return res(ctx.status(200), ctx.json(mockDatabase.customers));
   }),
 ];

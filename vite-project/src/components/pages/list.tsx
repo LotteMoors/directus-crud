@@ -10,15 +10,20 @@ function List() {
   // const params = useParams()
   const getCustomers = async () => {
     const json = await api("http://localhost:8055/items/customers", "GET", undefined);
-    return json.data;
+    return json.data || json;
   };
   const getCountries = async () => {
     const json = await api("http://localhost:8055/items/countries", "GET", undefined);
-    return json.data;
+    return json.data || json;
   };
 
-  const {data, error, isLoading, isFetching} = useQuery("customer", getCustomers);
+  const {data: customers, error, isLoading, isFetching, refetch} = useQuery("customers", getCustomers);
   const {data: countries} = useQuery("countries", getCountries);
+
+  const handleDelete = async (id: string) => {
+    await api(`http://localhost:8055/items/customers/${id}`, "DELETE", undefined);
+    refetch()
+  };
 
   if (error) return <div style={{color: "red"}}>Request failed</div>;
   if (isLoading || isFetching)
@@ -38,13 +43,15 @@ function List() {
       <Link to="/create">
         <Button label="+ Create" />
       </Link>
-      {data?.map((el: customerData, i: number) => {
-        const country = countries.find((country: {id: number; name: string}) => country.id === el.country);
+      {customers?.map((el: customerData, i: number) => {
+        const country = countries?.find((country: {id: number; name: string}) => country.id === el.country);
         return (
           <Card
             key={i}
+            id={el.id}
             title={`${el.firstname} ${el.lastname}`}
-            content={`${el.street} ${el.house_number} - ${el.zip_code}, ${country.name}`}
+            content={`${el.street} ${el.house_number} - ${el.zip_code}, ${country?.name}`}
+            handleDelete={handleDelete}
           />
         );
       })}

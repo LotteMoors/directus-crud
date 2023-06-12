@@ -6,5 +6,6 @@ export type customerData = {
     lastname: string;
     street: string;
     zip_code: number;
-    telephone?: string;
+    telephone: string | null;
+    id: string;
   };

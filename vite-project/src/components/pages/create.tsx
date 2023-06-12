@@ -15,7 +15,8 @@ const initialValues = {
   zip_code: 0,
   city: "",
   country: 0,
-  telephone: "1234",
+  telephone: "",
+  id: "",
 };
 
 const consumerSchema = object({
@@ -25,7 +26,7 @@ const consumerSchema = object({
   zip_code: number().min(1000).max(9999),
   city: string().required(),
   country: number().required().positive().integer(),
-  street: string().required()
+  street: string().required(),
 });
 
 function Create() {
@@ -41,7 +42,7 @@ function Create() {
   });
   const [data, setData] = useState<customerData>(initialValues);
   const navigate = useNavigate();
-  let value: "city" | "country" | "firstname" | "house_number" | "lastname" | "street" | "zip_code" | "telephone"
+  let value: "city" | "country" | "firstname" | "house_number" | "lastname" | "street" | "zip_code" | "telephone";
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value, type} = e.target;
@@ -60,11 +61,24 @@ function Create() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{display: "grid", gridTemplateColumns: '50% 50%', width: "100%"}}>
-      {Object.keys(getValues()).map(el => {
-       return <Input title={el} name={el as typeof value} error={errors[el as typeof value]} register={register} handleInputChange={handleInputChange}/>
+    <form onSubmit={handleSubmit(onSubmit)} style={{display: "grid", gridTemplateColumns: "50% 50%", width: "100%"}}>
+      {Object.keys(getValues()).map((el, i) => {
+        return (
+          <Input
+            key={i}
+            title={el}
+            name={el as typeof value}
+            error={errors[el as typeof value]}
+            register={register}
+            handleInputChange={handleInputChange}
+          />
+        );
       })}
-      <input type="submit" value="Submit" />
+      <input
+        style={{width: "30%", height: "30%", marginTop: "2.7rem", marginLeft: "5rem"}}
+        type="submit"
+        value="Submit"
+      />
     </form>
   );
 }
