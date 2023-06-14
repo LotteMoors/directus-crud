@@ -3,7 +3,7 @@ import {object, string, number} from "yup";
 import {customerData} from "../../types/types";
 import {api} from "../../utils/funcs/api";
 import {useNavigate} from "react-router-dom";
-import {useForm} from "react-hook-form";
+import {FormProvider, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import Input from "../basics/Input/Input";
 
@@ -31,7 +31,6 @@ const consumerSchema = object({
 
 function Create() {
   const {
-    register,
     handleSubmit,
     getValues,
     formState: {errors},
@@ -40,6 +39,8 @@ function Create() {
     resolver: yupResolver(consumerSchema),
     defaultValues: initialValues,
   });
+  const methods = useForm();
+
   const [data, setData] = useState<customerData>(initialValues);
   const navigate = useNavigate();
   let value: "city" | "country" | "firstname" | "house_number" | "lastname" | "street" | "zip_code" | "telephone";
@@ -61,25 +62,27 @@ function Create() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{display: "grid", gridTemplateColumns: "50% 50%", width: "100%"}}>
-      {Object.keys(getValues()).map((el, i) => {
-        return (
-          <Input
-            key={i}
-            title={el}
-            name={el as typeof value}
-            error={errors[el as typeof value]}
-            register={register}
-            handleInputChange={handleInputChange}
-          />
-        );
-      })}
-      <input
-        style={{width: "30%", height: "30%", marginTop: "2.7rem", marginLeft: "5rem"}}
-        type="submit"
-        value="Submit"
-      />
-    </form>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} style={{display: "grid", gridTemplateColumns: "50% 50%", width: "100%"}}>
+        {Object.keys(getValues()).map((el, i) => {
+          if (el === 'id') return
+          return (
+            <Input
+              key={i}
+              label={el}
+              name={el as typeof value}
+              error={errors[el as typeof value]}
+              handleInputChange={handleInputChange}
+            />
+          );
+        })}
+        <input
+          style={{width: "40%", height: "80%"}}
+          type="submit"
+          value="Submit"
+        />
+      </form>
+    </FormProvider>
   );
 }
 

@@ -1,23 +1,22 @@
-import { FieldError, UseFormRegister } from "react-hook-form";
-import "./Input.module.scss"
-import { customerData } from "../../../types/types";
-
+import {FieldError, useFormContext} from "react-hook-form";
+import "./Input.module.scss";
 
 type inputProps = {
-  title: string;
-  name: "city" | "country" | "firstname" | "house_number" | "lastname" | "street" | "zip_code" | "telephone";
-  error: FieldError | undefined;
-  register: UseFormRegister<customerData>;
+  label: string;
+  name: string;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: FieldError;
+  type?: string;
 };
 
 const Input = (props: inputProps) => {
+  const {register} = useFormContext();
   return (
     <div>
-      <label htmlFor={props.name}>{props.title}</label>
+      <label htmlFor={props.name}>{props.label}</label>
       <input
-        {...props.register(props.name)}
-        type="text"
+        {...register(props.name)}
+        type={!props.type? 'text' : props.type}
         id={props.name}
         name={props.name}
         onChange={props.handleInputChange}

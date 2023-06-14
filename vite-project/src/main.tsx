@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import "./index.css";
 import List from "./components/pages/list.tsx";
 import Create from "./components/pages/create.tsx";
+import Login from "./components/pages/login.tsx";
 import ErrorElement from "./components/elements/ErrorElement/ErrorElement.tsx";
 
 const router = createBrowserRouter([
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/create",
         element: <Create />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
       },
     ],
   },

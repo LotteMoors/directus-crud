@@ -1,23 +1,25 @@
 import {render} from "@testing-library/react";
 import Input from "../Input";
 import {customerData} from "types/types";
-import {useForm} from "react-hook-form";
+import {FormProvider, useForm} from "react-hook-form";
 
 const InputWithForm = () => {
   const {
-    register,
     formState: {errors},
   } = useForm<customerData>();
+  const methods = useForm();
+
   return (
-    <Input
-      title="test"
-      name="firstname"
-      error={errors["firstname"]}
-      register={register}
-      handleInputChange={() => {
-        console.log("test");
-      }}
-    />
+    <FormProvider {...methods}>
+      <Input
+        label="test"
+        name="firstname"
+        error={errors["firstname"]}
+        handleInputChange={() => {
+          console.log("test");
+        }}
+      />
+    </FormProvider>
   );
 };
 

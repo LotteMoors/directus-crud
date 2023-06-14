@@ -1,5 +1,5 @@
 import { vi } from 'vitest'
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import Card from "../Card";
 
 test("delete function should be called with id", async () => {
@@ -12,7 +12,8 @@ test("delete function should be called with id", async () => {
       handleDelete={deleteMock}
     />
   );
-  const img = document.querySelector("img") as HTMLImageElement;
+  // const img = document.querySelector("img") as HTMLImageElement;
+  const img = screen.queryByRole("img") as HTMLImageElement;
   fireEvent.click(img);
   expect(deleteMock).toHaveBeenCalledWith("1");
 });
