@@ -51,16 +51,3 @@ export const customers = [
     return res(ctx.status(200), ctx.json(mockDatabase.customers));
   }),
 ];
-
-
-// test('handles server error', async () => {
-//   server.use(
-//     // override the initial "GET /greeting" request handler
-//     // to return a 500 Server Error
-//     rest.get(import.meta.env.VITE_MOCK_API_URL + "/items/customers", (req, res, ctx) => {
-//       return res(ctx.status(500))
-//     }),
-//   )
-
-//   // ...
-// })

@@ -1,17 +1,14 @@
 import {render} from "@testing-library/react";
 import Input from "../Input";
-import {useForm} from "react-hook-form";
 import {customerData} from "types/types";
+import {useForm} from "react-hook-form";
 
-test("Render Input", () => {
+const InputWithForm = () => {
   const {
     register,
     formState: {errors},
-  } = useForm<customerData>({
-    defaultValues: {},
-  });
-
-  render(
+  } = useForm<customerData>();
+  return (
     <Input
       title="test"
       name="firstname"
@@ -22,4 +19,8 @@ test("Render Input", () => {
       }}
     />
   );
+};
+
+test("Render Input", () => {
+  render(<InputWithForm />);
 });
